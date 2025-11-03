@@ -4,7 +4,7 @@
 
 This demo uses Amazon DynamoDB with Next.js to fetch movies from the database. It is able to securely connect to DynamoDB without using hardcoded access tokens through Vercel's [OIDC Federation](https://vercel.com/docs/security/secure-backend-access/oidc).
 
-**Demo:** https://dynamodb.vercel.app
+**Demo:** TK
 
 ## Setup
 
