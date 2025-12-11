@@ -2,43 +2,49 @@
 
 # Amazon DynamoDB Movies Demo
 
-This demo uses Amazon DynamoDB with Next.js to fetch movies from the database. It is able to securely connect to DynamoDB without using hardcoded access tokens through Vercel's [OIDC Federation](https://vercel.com/docs/security/secure-backend-access/oidc).
+This demo uses Amazon DynamoDB with Next.js to fetch movies from the database. It is able to securely connect to DynamoDB without using hardcoded access tokens through Vercel's [OIDC Federation](https://vercel.com/docs/security/secure-backend-access/oidc) using Vercel native integration. 
 
-![This is an alt text.](/app/Vercel-AWS-GitHub-DDB.png)
+[![This is an alt text.](/public/Vercel-AWS-GitHub-DDB.png)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Faws-dynamodb-demo)
 
-**Demo:** TK
+**Demo:** [(https://aws-vercel-dynamodb-demo.vercel.app/)](https://aws-vercel-dynamodb-demo.vercel.app/)
 
-## Setup
 
-1. Add required environment variables to your vercel project
-```
-AWS_ROLE_ARN=arn:aws:iam::YOUR_ACCOUNT:role
-DB_TABLE_NAME=your-dynamodb-table-name
-AWS_REGION=us-east-1
-```
+**Getting Started:** 
+* Click the "Deploy" button to clone this repo, create a new Vercel project, setup the AWS integration, and provision a new Amazon DynamoDB:
+* [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Faws-dynamodb-demo)
 
-2. Pull vercel environment variables locally
+* Once the process is complete, you can clone the newly created GitHub repository and start making changes locally.
 
-``bash
+## Requirements
+
+- Installed Amazon DynamoDB from [![Vercel Marketplace](https://vercel.com/marketplace/aws)]  
+
+## Local Setup
+
+1. Pull vercel environment variables locally
+
+```bash
 vercel env pull
-``
-
-3. Install dependencies:
-```bash
-npm install
 ```
 
-4. Run migrations to create tables:
+2. Install dependencies:
 ```bash
-npm run db:migrate
+pnpm install
 ```
 
-5. Seed the database with movie data:
+3. Run migrations to create tables:
 ```bash
-npm run db:seed
+pnpm run db:migrate
 ```
 
-6. Start the development server:
+4. Seed the database with movie data:
 ```bash
-npm run dev
+pnpm run db:seed
 ```
+
+5. Start the development server:
+```bash
+pnpm run dev
+```
+6. View development server:
+http://localhost:3000
