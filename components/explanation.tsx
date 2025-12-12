@@ -1,13 +1,24 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Explanation() {
   return (
     <div className="text-gray-800 dark:text-gray-200 text-sm border border-dashed border-gray-300 dark:border-gray-600 p-4 mb-4 font-mono bg-white dark:bg-gray-900">
+     <div className="mb-4">
+       <a href="https://vercel.com/new/clone?repository-url=https://github.com/vercel/aws-dynamodb-demo&project-name=aws-dynamodb-demo&repository-name=aws-dynamodb-demo&products=[{"type":"integration","integrationSlug":"aws","productSlug":"aws-dynamodb","protocol":"storage"}]
+          <img src="/Vercel-AWS-GitHub-DDB.png"
+          alt="Vercel AWS DynamoDB native integration"
+          width={600}
+          height={400}
+          className="w-full h-auto"
+        >
+     </a>
+      </div>
       <p className="mb-2">
         This app uses <b className="font-bold">Amazon DynamoDB</b> with
         Next.js and Vercel (
         <Link
-          href="https://github.com/vercel/aws-dynamodb-movies-demo"
+          href="https://github.com/vercel/aws-dynamodb-demo"
           target="_blank"
           rel="noreferrer"
           className="text-gray-900 dark:text-white border-b border-gray-900 dark:border-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
