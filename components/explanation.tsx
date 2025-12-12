@@ -5,14 +5,20 @@ export default function Explanation() {
   return (
     <div className="text-gray-800 dark:text-gray-200 text-sm border border-dashed border-gray-300 dark:border-gray-600 p-4 mb-4 font-mono bg-white dark:bg-gray-900">
      <div className="mb-4">
-       <a href="https://vercel.com/new/clone?repository-url=https://github.com/vercel/aws-dynamodb-demo&project-name=aws-dynamodb-demo&repository-name=aws-dynamodb-demo&products=[{"type":"integration","integrationSlug":"aws","productSlug":"aws-dynamodb","protocol":"storage"}]
-          <img src="/Vercel-AWS-GitHub-DDB.png"
+         <Link
+        href="https://vercel.com/new/clone?repository-url=https://github.com/vercel/aws-dynamodb-demo&project-name=aws-dynamodb-demo&repository-name=aws-dynamodb-demo&products=[{%22type%22:%22integration%22,%22integrationSlug%22:%22aws%22,%22productSlug%22:%22aws-dynamodb%22,%22protocol%22:%22storage%22}]"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="transition-opacity hover:opacity-90"
+      >
+        <Image
+          src="/Vercel-AWS-GitHub-DDB.png"
           alt="Vercel AWS DynamoDB native integration"
           width={600}
           height={400}
           className="w-full h-auto"
-        >
-     </a>
+        />
+     </Link>
       </div>
       <p className="mb-2">
         This app uses <b className="font-bold">Amazon DynamoDB</b> with
