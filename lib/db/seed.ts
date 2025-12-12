@@ -23,7 +23,7 @@ async function readMovieTitlesFromCSV(): Promise<string[]> {
       .on("end", () => {
         const uniqueMovieTitles = Array.from(movieTitles);
         console.log(
-          `Parsed ${uniqueMovieTitles.length} unique movies from CSV.`
+          `Parsed ${uniqueMovieTitles.length} unique movies from CSV.`,
         );
         resolve(uniqueMovieTitles);
       })
@@ -59,7 +59,7 @@ async function main() {
       console.log(
         `Inserted ${Math.min(i + batchSize, movieTitles.length)} / ${
           movieTitles.length
-        } movies`
+        } movies`,
       );
     } catch (error) {
       console.error("Batch insert error:", error);

@@ -18,7 +18,7 @@ export interface MoviesResult {
 
 export async function getMovies(
   sessionId?: string,
-  filter?: string
+  filter?: string,
 ): Promise<MoviesResult> {
   const client = await getClient();
   const startTime = performance.now();
@@ -62,7 +62,7 @@ export async function getMovies(
       const voteCommand = new QueryCommand(voteParams);
       const voteResult = await client.send(voteCommand);
       const votedMovieIds = new Set(
-        (voteResult.Items || []).map((vote) => vote.movieId)
+        (voteResult.Items || []).map((vote) => vote.movieId),
       );
 
       movies = movies.map((movie) => ({

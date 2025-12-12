@@ -1,28 +1,28 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Explanation() {
   return (
     <div className="text-gray-800 dark:text-gray-200 text-sm border border-dashed border-gray-300 dark:border-gray-600 p-4 mb-4 font-mono bg-white dark:bg-gray-900">
-     <div className="mb-4">
-         <Link
-        href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Faws-dynamodb-demo&project-name=aws-dynamodb-demo&repository-name=aws-dynamodb-demo&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22aws%22%2C%22productSlug%22%3A%22aws-dynamodb%22%2C%22protocol%22%3A%22storage%22%7D%5D"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="transition-opacity hover:opacity-90"
-      >
-        <Image
-          src="/Vercel-AWS-GitHub-DDB.png"
-          alt="Vercel AWS DynamoDB native integration"
-          width={600}
-          height={400}
-          className="w-full h-auto"
-        />
-     </Link>
+      <div className="mb-4">
+        <Link
+          href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Faws-dynamodb-demo&project-name=aws-dynamodb-demo&repository-name=aws-dynamodb-demo&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22aws%22%2C%22productSlug%22%3A%22aws-dynamodb%22%2C%22protocol%22%3A%22storage%22%7D%5D"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-opacity hover:opacity-90"
+        >
+          <Image
+            src="/Vercel-AWS-GitHub-DDB.png"
+            alt="Vercel AWS DynamoDB native integration"
+            width={600}
+            height={400}
+            className="w-full h-auto"
+          />
+        </Link>
       </div>
       <p className="mb-2">
-        This app uses <b className="font-bold">Amazon DynamoDB</b> with
-        Next.js and Vercel (
+        This app uses <b className="font-bold">Amazon DynamoDB</b> with Next.js
+        and Vercel (
         <Link
           href="https://github.com/vercel/aws-dynamodb-demo"
           target="_blank"
@@ -39,8 +39,8 @@ export default function Explanation() {
           <span className="pl-1">How does this work?</span>
         </summary>
         <p className="p-5 mt-2 bg-gray-100 dark:bg-gray-800">
-          Movies are fetched from the DynamoDB table when the page loads. It
-          has been seeded with the top 5000 movies from{' '}
+          Movies are fetched from the DynamoDB table when the page loads. It has
+          been seeded with the top 5000 movies from{" "}
           <Link
             href="https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
             target="_blank"
@@ -48,11 +48,11 @@ export default function Explanation() {
             className="text-gray-900 dark:text-white border-b border-gray-900 dark:border-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
             TMDB.
-          </Link>{' '}
-          When a user votes on a movie,{' '}
+          </Link>{" "}
+          When a user votes on a movie,{" "}
           <code className="bg-gray-200 dark:bg-gray-700 px-1">
             useOptimistic
-          </code>{' '}
+          </code>{" "}
           is used to instantly show the new score and updated time.
         </p>
       </details>

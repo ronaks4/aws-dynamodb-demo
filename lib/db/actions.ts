@@ -10,7 +10,7 @@ import { randomUUID } from "crypto";
 export async function voteAction(
   movie: Movie,
   score: number,
-  lastVoteTime: Date
+  lastVoteTime: Date,
 ) {
   const client = await getClient();
   const cookieStore = await cookies();

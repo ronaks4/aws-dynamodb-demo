@@ -15,7 +15,7 @@ export function highlightMatch(text: string, highlight: string) {
   const regex = new RegExp(`(${highlight})`, "gi");
   return text.replace(
     regex,
-    '<span class="bg-yellow-300 dark:bg-yellow-700">$1</span>'
+    '<span class="bg-yellow-300 dark:bg-yellow-700">$1</span>',
   );
 }
 
@@ -53,7 +53,7 @@ export function MovieVoting({
     { movies: initialMovies, filter: highlight },
     function reducer(state, newState: MovieState) {
       return { ...newState };
-    }
+    },
   );
 
   const sortedAndFilteredMovies = useMemo(() => {
@@ -70,7 +70,7 @@ export function MovieVoting({
     if (state.filter) {
       const lowercasedFilter = state.filter.toLowerCase();
       result = result.filter((movie) =>
-        movie.title.toLowerCase().includes(lowercasedFilter)
+        movie.title.toLowerCase().includes(lowercasedFilter),
       );
     }
 
@@ -103,7 +103,7 @@ export function MovieVoting({
       await voteAction(
         movie,
         updatedMovie.score,
-        new Date(updatedMovie.lastVoteTime)
+        new Date(updatedMovie.lastVoteTime),
       );
     });
   };
