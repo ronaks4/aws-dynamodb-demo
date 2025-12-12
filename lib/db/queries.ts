@@ -1,6 +1,6 @@
-import { getClient } from './db';
-import { ScanCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { performance } from 'perf_hooks';
+import { getClient } from "./db";
+import { ScanCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { performance } from "perf_hooks";
 
 export interface Movie {
   id: string;
@@ -16,56 +16,61 @@ export interface MoviesResult {
   queryTimeMs: string;
 }
 
-export async function getMovies(sessionId?: string, filter?: string): Promise<MoviesResult> {
+export async function getMovies(
+  sessionId?: string,
+  filter?: string
+): Promise<MoviesResult> {
   const client = await getClient();
   const startTime = performance.now();
-  const tableName = process.env.DB_TABLE_NAME;
-  
+  const tableName = process.env.DYNAMODB_TABLE_NAME;
+
   if (!tableName) {
-    throw new Error('DB_TABLE_NAME environment variable is required');
+    throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
   }
 
   try {
     // Get movies
     const movieParams: any = {
       TableName: tableName,
-      FilterExpression: 'entityType = :entityType',
+      FilterExpression: "entityType = :entityType",
       ExpressionAttributeValues: {
-        ':entityType': 'movie',
+        ":entityType": "movie",
       },
     };
 
     if (filter) {
-      movieParams.FilterExpression += ' AND contains(title, :filter)';
-      movieParams.ExpressionAttributeValues[':filter'] = filter;
+      movieParams.FilterExpression += " AND contains(title, :filter)";
+      movieParams.ExpressionAttributeValues[":filter"] = filter;
     }
 
     const movieCommand = new ScanCommand(movieParams);
     const movieResult = await client.send(movieCommand);
-    
+
     let movies = movieResult.Items || [];
-    
+
     // Check votes for session if provided
     if (sessionId) {
       const voteParams = {
         TableName: tableName,
-        IndexName: 'GSI1',
-        KeyConditionExpression: 'GSI1PK = :sessionId',
+        IndexName: "GSI1",
+        KeyConditionExpression: "GSI1PK = :sessionId",
         ExpressionAttributeValues: {
-          ':sessionId': `SESSION#${sessionId}`,
+          ":sessionId": `SESSION#${sessionId}`,
         },
       };
-      
+
       const voteCommand = new QueryCommand(voteParams);
       const voteResult = await client.send(voteCommand);
-      const votedMovieIds = new Set((voteResult.Items || []).map(vote => vote.movieId));
-      
-      movies = movies.map(movie => ({
+      const votedMovieIds = new Set(
+        (voteResult.Items || []).map((vote) => vote.movieId)
+      );
+
+      movies = movies.map((movie) => ({
         ...movie,
         hasVoted: votedMovieIds.has(movie.id),
       }));
     } else {
-      movies = movies.map(movie => ({ ...movie, hasVoted: false }));
+      movies = movies.map((movie) => ({ ...movie, hasVoted: false }));
     }
 
     const endTime = performance.now();
@@ -77,7 +82,7 @@ export async function getMovies(sessionId?: string, filter?: string): Promise<Mo
       queryTimeMs,
     };
   } catch (error) {
-    console.error('Error fetching movies:', error);
+    console.error("Error fetching movies:", error);
     throw error;
   }
 }

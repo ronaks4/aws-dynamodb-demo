@@ -1,9 +1,13 @@
-import { awsCredentialsProvider } from '@vercel/functions/oidc';
+import { awsCredentialsProvider } from "@vercel/functions/oidc";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, BatchWriteCommand, ScanCommand, QueryCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { config } from 'dotenv';
-
-config();
+import {
+  DynamoDBDocumentClient,
+  BatchWriteCommand,
+  ScanCommand,
+  QueryCommand,
+  PutCommand,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
 
 let docClient: DynamoDBDocumentClient | null = null;
 
@@ -13,35 +17,37 @@ export async function getClient() {
   }
 
   try {
-    const credentials = await awsCredentialsProvider();
+    const credentials = await awsCredentialsProvider({
+      roleArn: process.env.AWS_ROLE_ARN!,
+    });
     const client = new DynamoDBClient({
-      region: process.env.AWS_REGION || 'us-east-1',
+      region: process.env.AWS_REGION || "us-east-1",
       credentials,
     });
     docClient = DynamoDBDocumentClient.from(client);
     return docClient;
   } catch (error) {
-    console.error('Failed to create DynamoDB client:', error);
+    console.error("Failed to create DynamoDB client:", error);
     throw error;
   }
 }
 
 export async function batchWriteItems(items: any[]) {
   const client = await getClient();
-  const tableName = process.env.DB_TABLE_NAME;
-  
+  const tableName = process.env.DYNAMODB_TABLE_NAME;
+
   if (!tableName) {
-    throw new Error('DB_TABLE_NAME environment variable is required');
+    throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
   }
 
-  const writeRequests = items.map(item => ({
+  const writeRequests = items.map((item) => ({
     PutRequest: { Item: item },
   }));
-  
+
   const params = {
     RequestItems: {
       [tableName]: writeRequests,
-    }
+    },
   };
 
   try {
@@ -49,21 +55,21 @@ export async function batchWriteItems(items: any[]) {
     const data = await client.send(command);
     return data;
   } catch (error) {
-    console.error('BatchWrite error:', error);
+    console.error("BatchWrite error:", error);
     throw error;
   }
 }
 
 export async function scanTable() {
   const client = await getClient();
-  const tableName = process.env.DB_TABLE_NAME;
-  
+  const tableName = process.env.DYNAMODB_TABLE_NAME;
+
   if (!tableName) {
-    throw new Error('DB_TABLE_NAME environment variable is required');
+    throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
   }
 
   const params = {
-    TableName: tableName
+    TableName: tableName,
   };
 
   try {
@@ -71,7 +77,7 @@ export async function scanTable() {
     const data = await client.send(command);
     return data;
   } catch (error) {
-    console.error('Scan error:', error);
+    console.error("Scan error:", error);
     throw error;
   }
 }
