@@ -1,6 +1,5 @@
 import Explanation from "@/components/explanation";
 import Loading from "@/components/loading";
-import { MovieVoting } from "@/components/movie-voting";
 import { getMovies } from "@/lib/db/queries";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
@@ -29,12 +28,4 @@ async function Movies({ searchParams }: Props) {
     filter,
   );
 
-  return (
-    <MovieVoting
-      movies={movies}
-      highlight={filter || ""}
-      queryTimeMs={queryTimeMs}
-      totalRecords={totalRecords}
-    />
-  );
 }
