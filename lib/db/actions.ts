@@ -15,6 +15,8 @@ export async function voteAction(
   const client = await getClient();
   const cookieStore = await cookies();
   const tableName = process.env.DYNAMODB_TABLE_NAME;
+    const partitionKey = process.env.DYNAMODB_TABLE_PARTITION_KEY || "PK";
+  const sortKey = process.env.DYNAMODB_TABLE_SORT_KEY || "SK";
 
   if (!tableName) {
     throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
@@ -29,8 +31,8 @@ export async function voteAction(
     const sessionParams = {
       TableName: tableName,
       Item: {
-        PK: `SESSION#${sessionId}`,
-        SK: `SESSION#${sessionId}`,
+        [partitionKey]: `SESSION#${sessionId}`,
+        [sortKey]: `SESSION#${sessionId}`,
         entityType: "session",
         id: sessionId,
         createdAt: new Date().toISOString(),
@@ -53,8 +55,8 @@ export async function voteAction(
   const voteKey = {
     TableName: tableName,
     Key: {
-      PK: `VOTE#${sessionId}#${movie.id}`,
-      SK: `VOTE#${sessionId}#${movie.id}`,
+     [partitionKey]: `VOTE#${sessionId}#${movie.id}`,
+      [sortKey]: `VOTE#${sessionId}#${movie.id}`,
     },
   };
 
@@ -67,8 +69,8 @@ export async function voteAction(
   const voteParams = {
     TableName: tableName,
     Item: {
-      PK: `VOTE#${sessionId}#${movie.id}`,
-      SK: `VOTE#${sessionId}#${movie.id}`,
+      [partitionKey]: `VOTE#${sessionId}#${movie.id}`,
+      [sortKey]: `VOTE#${sessionId}#${movie.id}`,
       entityType: "vote",
       sessionId,
       movieId: movie.id,
@@ -84,8 +86,8 @@ export async function voteAction(
   const updateParams = {
     TableName: tableName,
     Key: {
-      PK: `MOVIE#${movie.id}`,
-      SK: `MOVIE#${movie.id}`,
+      [partitionKey]: `MOVIE#${movie.id}`,
+      [sortKey]: `MOVIE#${movie.id}`,
     },
     UpdateExpression: "SET score = :score, lastVoteTime = :lastVoteTime",
     ExpressionAttributeValues: {

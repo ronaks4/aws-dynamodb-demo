@@ -11,6 +11,8 @@ config();
 
 async function createTable() {
   const tableName = process.env.DYNAMODB_TABLE_NAME;
+  const partitionKey = process.env.DYNAMODB_TABLE_PARTITION_KEY || "PK";
+  const sortKey = process.env.DYNAMODB_TABLE_SORT_KEY || "SK";
 
   if (!tableName) {
     throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
@@ -39,12 +41,12 @@ async function createTable() {
     const command = new CreateTableCommand({
       TableName: tableName,
       KeySchema: [
-        { AttributeName: "PK", KeyType: "HASH" },
-        { AttributeName: "SK", KeyType: "RANGE" },
+        { AttributeName: partitionKey, KeyType: "HASH" },
+        { AttributeName: sortKey, KeyType: "RANGE" },
       ],
       AttributeDefinitions: [
-        { AttributeName: "PK", AttributeType: "S" },
-        { AttributeName: "SK", AttributeType: "S" },
+        { AttributeName: partitionKey, AttributeType: "S" },
+        { AttributeName: sortKey, AttributeType: "S" },
         { AttributeName: "GSI1PK", AttributeType: "S" },
         { AttributeName: "GSI1SK", AttributeType: "S" },
       ],
