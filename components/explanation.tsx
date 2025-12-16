@@ -49,11 +49,7 @@ export default function Explanation() {
           >
             TMDB.
           </Link>{" "}
-          When a user votes on a movie,{" "}
-          <code className="bg-gray-200 dark:bg-gray-700 px-1">
-            useOptimistic
-          </code>{" "}
-          is used to instantly show the new score and updated time.
+          Search movies... below
         </p>
       </details>
 
