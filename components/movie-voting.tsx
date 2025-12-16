@@ -56,6 +56,9 @@ export function MovieVoting({
     },
   );
 
+  // TODO: Enable voting. Requires GSI.
+  const isVotingEnabled = false;
+
   const sortedAndFilteredMovies = useMemo(() => {
     let result = [...state.movies];
     result.sort((a, b) => {
@@ -87,6 +90,9 @@ export function MovieVoting({
   };
 
   const handleVote = async (movie: Movie, voteType: "up" | "down") => {
+    if (!isVotingEnabled) {
+      return;
+    }
     startTransition(async () => {
       const updatedMovie: Movie = {
         ...movie,
@@ -120,29 +126,39 @@ export function MovieVoting({
           >
             <div className="flex items-center flex-grow">
               <div className="flex items-center space-x-1 mr-3 mb-auto md:mb-0">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleVote(movie, "up")}
-                  className={cn("p-0 h-6 w-6", movie.hasVoted && "!opacity-10")}
-                  aria-label={`Upvote ${movie.title}`}
-                  disabled={movie.hasVoted}
-                >
-                  <ChevronUp className="w-4 h-4" />
-                </Button>
+                {isVotingEnabled ? (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleVote(movie, "up")}
+                    className={cn(
+                      "p-0 h-6 w-6",
+                      movie.hasVoted && "!opacity-10",
+                    )}
+                    aria-label={`Upvote ${movie.title}`}
+                    disabled={movie.hasVoted}
+                  >
+                    <ChevronUp className="w-4 h-4" />
+                  </Button>
+                ) : null}
                 <span className="text-sm font-bold min-w-[2ch] text-center">
                   {movie.score}
                 </span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleVote(movie, "down")}
-                  className={cn("p-0 h-6 w-6", movie.hasVoted && "!opacity-10")}
-                  aria-label={`Downvote ${movie.title}`}
-                  disabled={movie.hasVoted}
-                >
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
+                {isVotingEnabled ? (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleVote(movie, "down")}
+                    className={cn(
+                      "p-0 h-6 w-6",
+                      movie.hasVoted && "!opacity-10",
+                    )}
+                    aria-label={`Downvote ${movie.title}`}
+                    disabled={movie.hasVoted}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                ) : null}
               </div>
               <span
                 className="flex-grow"

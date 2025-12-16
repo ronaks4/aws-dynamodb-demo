@@ -48,8 +48,11 @@ export async function getMovies(
 
     let movies = movieResult.Items || [];
 
+    // TODO: Enable voting. Requires GSI.
+    const isVotingEnabled = false;
+
     // Check votes for session if provided
-    if (sessionId) {
+    if (sessionId && isVotingEnabled) {
       const voteParams = {
         TableName: tableName,
         IndexName: "GSI1",
