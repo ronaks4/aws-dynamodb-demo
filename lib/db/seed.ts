@@ -38,14 +38,17 @@ async function main() {
   const movieTitles = await readMovieTitlesFromCSV();
   const defaultDate = new Date("2024-12-07");
   const batchSize = 25;
+  const partitionKey = process.env.DYNAMODB_TABLE_PARTITION_KEY || "PK";
+  const sortKey = process.env.DYNAMODB_TABLE_SORT_KEY || "SK";
+
 
   for (let i = 0; i < movieTitles.length; i += batchSize) {
     try {
       const batch = movieTitles.slice(i, i + batchSize).map((title, index) => {
         const movieId = (i + index + 1).toString();
         return {
-          PK: `MOVIE#${movieId}`,
-          SK: `MOVIE#${movieId}`,
+          [partitionKey]: `MOVIE#${movieId}`,
+          [sortKey]: `MOVIE#${movieId}`,
           entityType: "movie",
           id: movieId,
           title,
