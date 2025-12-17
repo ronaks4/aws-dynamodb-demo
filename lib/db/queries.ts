@@ -20,7 +20,7 @@ export async function getMovies(
   sessionId?: string,
   filter?: string,
 ): Promise<MoviesResult> {
-  const client = await getClient();
+  const client = getClient();
   const startTime = performance.now();
   const tableName = process.env.DYNAMODB_TABLE_NAME;
 

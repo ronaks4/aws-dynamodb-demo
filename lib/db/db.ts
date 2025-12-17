@@ -4,36 +4,22 @@ import {
   DynamoDBDocumentClient,
   BatchWriteCommand,
   ScanCommand,
-  QueryCommand,
-  PutCommand,
-  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-let docClient: DynamoDBDocumentClient | null = null;
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION || "us-east-1",
+  credentials: awsCredentialsProvider({
+    roleArn: process.env.AWS_ROLE_ARN!,
+  }),
+});
 
-export async function getClient() {
-  if (docClient) {
-    return docClient;
-  }
+const docClient = DynamoDBDocumentClient.from(client);
 
-  try {
-    const credentials = await awsCredentialsProvider({
-      roleArn: process.env.AWS_ROLE_ARN!,
-    });
-    const client = new DynamoDBClient({
-      region: process.env.AWS_REGION || "us-east-1",
-      credentials,
-    });
-    docClient = DynamoDBDocumentClient.from(client);
-    return docClient;
-  } catch (error) {
-    console.error("Failed to create DynamoDB client:", error);
-    throw error;
-  }
+export function getClient() {
+  return docClient;
 }
 
 export async function batchWriteItems(items: any[]) {
-  const client = await getClient();
   const tableName = process.env.DYNAMODB_TABLE_NAME;
 
   if (!tableName) {
@@ -52,7 +38,7 @@ export async function batchWriteItems(items: any[]) {
 
   try {
     const command = new BatchWriteCommand(params);
-    const data = await client.send(command);
+    const data = await docClient.send(command);
     return data;
   } catch (error) {
     console.error("BatchWrite error:", error);
@@ -61,7 +47,6 @@ export async function batchWriteItems(items: any[]) {
 }
 
 export async function scanTable() {
-  const client = await getClient();
   const tableName = process.env.DYNAMODB_TABLE_NAME;
 
   if (!tableName) {
@@ -74,7 +59,7 @@ export async function scanTable() {
 
   try {
     const command = new ScanCommand(params);
-    const data = await client.send(command);
+    const data = await docClient.send(command);
     return data;
   } catch (error) {
     console.error("Scan error:", error);
