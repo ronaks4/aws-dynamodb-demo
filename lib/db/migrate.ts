@@ -18,12 +18,12 @@ async function createTable() {
     throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
   }
 
-  const credentials = await awsCredentialsProvider({
-    roleArn: process.env.AWS_ROLE_ARN!,
-  });
   const client = new DynamoDBClient({
-    region: process.env.AWS_REGION || "us-east-1",
-    credentials,
+    region: process.env.AWS_REGION!,
+    credentials: awsCredentialsProvider({
+      roleArn: process.env.AWS_ROLE_ARN!,
+      clientConfig: { region: process.env.AWS_REGION! },
+    }),
   });
 
   // Check if table already exists

@@ -1,7 +1,12 @@
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  BatchWriteCommand,
+  DynamoDBDocumentClient,
+} from "@aws-sdk/lib-dynamodb";
+import { awsCredentialsProvider } from "@vercel/functions/oidc";
 import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
-import { batchWriteItems } from "./db";
 import { config } from "dotenv";
 
 config({ path: ".env.local" });
@@ -42,6 +47,15 @@ async function main() {
   const sortKey = process.env.DYNAMODB_TABLE_SORT_KEY || "SK";
 
 
+  const client = new DynamoDBClient({
+    region: process.env.AWS_REGION!,
+    credentials: awsCredentialsProvider({
+      roleArn: process.env.AWS_ROLE_ARN!,
+      clientConfig: { region: process.env.AWS_REGION! },
+    }),
+  });
+  const docClient = DynamoDBDocumentClient.from(client);
+
   for (let i = 0; i < movieTitles.length; i += batchSize) {
     try {
       const batch = movieTitles.slice(i, i + batchSize).map((title, index) => {
@@ -57,7 +71,7 @@ async function main() {
         };
       });
 
-      await batchWriteItems(batch);
+      await batchWriteItems(docClient, batch);
 
       console.log(
         `Inserted ${Math.min(i + batchSize, movieTitles.length)} / ${
@@ -72,6 +86,33 @@ async function main() {
 
   console.log(`Seeded ${movieTitles.length} movies`);
   process.exit();
+}
+
+async function batchWriteItems(client: DynamoDBDocumentClient, items: any[]) {
+  const tableName = process.env.DYNAMODB_TABLE_NAME;
+
+  if (!tableName) {
+    throw new Error("DYNAMODB_TABLE_NAME environment variable is required");
+  }
+
+  const writeRequests = items.map((item) => ({
+    PutRequest: { Item: item },
+  }));
+
+  const params = {
+    RequestItems: {
+      [tableName]: writeRequests,
+    },
+  };
+
+  try {
+    const command = new BatchWriteCommand(params);
+    const data = await client.send(command);
+    return data;
+  } catch (error) {
+    console.error("BatchWrite error:", error);
+    throw error;
+  }
 }
 
 main().catch((error) => {

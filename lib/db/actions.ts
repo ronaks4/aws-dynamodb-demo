@@ -12,7 +12,7 @@ export async function voteAction(
   score: number,
   lastVoteTime: Date,
 ) {
-  const client = await getClient();
+  const client = getClient();
   const cookieStore = await cookies();
   const tableName = process.env.DYNAMODB_TABLE_NAME;
     const partitionKey = process.env.DYNAMODB_TABLE_PARTITION_KEY || "PK";
